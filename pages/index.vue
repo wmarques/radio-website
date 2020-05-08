@@ -10,14 +10,14 @@
         :loading="state === 'loading'"
         @click="play()"
       >
-        <v-icon v-if="state === 'stopped'">mdi-play</v-icon>
-        <v-icon v-if="state === 'playing'">mdi-pause</v-icon>
+        <v-icon v-if="state === 'stopped'">{{ icons.play }}</v-icon>
+        <v-icon v-if="state === 'playing'">{{ icons.stop }}</v-icon>
       </v-btn>
       <v-row align="center" justify="center" class="mt-10">
         <v-col class="text-center" cols="12" sm="6" md="4">
           <v-slider
             v-model="volume"
-            prepend-icon="mdi-volume-high"
+            :prepend-icon="icons.volume"
             min="0"
             max="100"
           ></v-slider>
@@ -53,12 +53,17 @@
 import format from 'date-fns/format';
 import { parseISO } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { mdiPlay, mdiStop, mdiVolumeHigh } from '@mdi/js';
 
 export default {
   data: () => {
     return {
       audio: null,
-
+      icons: {
+        play: mdiPlay,
+        stop: mdiStop,
+        volume: mdiVolumeHigh
+      },
       volume: 100,
       nextStreamDate: format(parseISO('2020-05-09T16:00:00.000Z'), 'PPp', {
         locale: fr

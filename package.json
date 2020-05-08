@@ -21,6 +21,7 @@
     }
   },
   "dependencies": {
+    "@mdi/js": "^5.1.45",
     "@nuxtjs/axios": "^5.3.6",
     "date-fns": "^2.12.0",
     "howler": "^2.1.3",
