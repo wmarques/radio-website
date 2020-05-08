@@ -1,8 +1,8 @@
 <template>
   <v-row class="hero-container" align="center" justify="center">
     <v-col class="text-center" cols="12">
-      <h1 class="display-4 mb-10">Web Radio</h1>
-      <div class="display-2 mb-10">Prochain stream: {{ nextStreamDate }}</div>
+      <div class="display-3 mb-10">La radio de William</div>
+      <div class="display-1 mb-10">Prochain live: {{ nextStreamDate }}</div>
       <v-btn
         fab
         x-large
@@ -13,9 +13,26 @@
         <v-icon v-if="state === 'stopped'">mdi-play</v-icon>
         <v-icon v-if="state === 'playing'">mdi-pause</v-icon>
       </v-btn>
+      <v-row align="center" justify="center" class="mt-10">
+        <v-col class="text-center" cols="12" sm="6" md="4">
+          <v-slider
+            v-model="volume"
+            prepend-icon="mdi-volume-high"
+            min="0"
+            max="100"
+          ></v-slider>
+        </v-col>
+      </v-row>
     </v-col>
+    <audio
+      id="player"
+      src="https://djset.wmarques.com/stream"
+      preload="auto"
+      style="display: none;"
+    ></audio>
   </v-row>
 </template>
+
 <style scoped>
 .hero-container {
   width: 100%;
@@ -25,13 +42,13 @@
   background: radial-gradient(
       ellipse at center,
       rgba(0, 0, 0, 0) 0%,
-      rgba(0, 0, 0, 0) 37%,
+      rgba(0, 0, 0, 0) 0%,
       rgba(0, 0, 0, 0.65) 100%
     ),
-    url('https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg') no-repeat
-      center center scroll;
+    url('/bg.jpg') no-repeat center center scroll;
 }
 </style>
+
 <script>
 import format from 'date-fns/format';
 import { parseISO } from 'date-fns';
@@ -40,24 +57,44 @@ import { fr } from 'date-fns/locale';
 export default {
   data: () => {
     return {
-      nextStreamDate: format(parseISO('2020-05-04T20:00:00.000Z'), 'PPp', {
+      audio: null,
+
+      volume: 100,
+      nextStreamDate: format(parseISO('2020-05-09T16:00:00.000Z'), 'PPp', {
         locale: fr
-      }),
-      audio: new Audio({
-        src: 'https://djset.wmarques.com/stream'
       }),
       state: 'stopped'
     };
   },
-  created() {},
+
+  watch: {
+    volume() {
+      this.audio.volume = this.volume / 100;
+    }
+  },
+  mounted() {
+    this.audio = document.getElementById('player');
+  },
   methods: {
     play() {
-      if (this.audio.playing()) {
-        this.audio.stop();
+      if (this.state === 'loading') {
+        return;
+      }
+
+      if (this.state === 'playing') {
+        this.audio.pause();
         this.state = 'stopped';
       } else {
-        this.audio.play();
-        this.state = 'playing';
+        this.audio.load();
+        this.audio.play().then(
+          () => {
+            this.state = 'playing';
+          },
+          () => {
+            this.state = 'stopped';
+          }
+        );
+        this.state = 'loading';
       }
     }
   }
