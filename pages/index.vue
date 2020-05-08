@@ -45,7 +45,7 @@
       rgba(0, 0, 0, 0) 0%,
       rgba(0, 0, 0, 0.65) 100%
     ),
-    url('/bg.jpg') no-repeat center center scroll;
+    url('~assets/bg.jpg') no-repeat center center scroll;
 }
 </style>
 
