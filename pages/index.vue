@@ -65,7 +65,7 @@ export default {
         volume: mdiVolumeHigh
       },
       volume: 100,
-      nextStreamDate: format(parseISO('2020-07-03T19:30:00.000Z'), 'PPp', {
+      nextStreamDate: format(parseISO('2020-09-02T19:30:00.000Z'), 'PPp', {
         locale: fr
       }),
       state: 'stopped'
