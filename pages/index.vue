@@ -24,9 +24,16 @@
         </v-col>
       </v-row>
     </v-col>
-    <audio
+    <!-- <audio
       id="player"
       src="https://djset.wmarques.com/stream"
+      preload="auto"
+      style="display: none;"
+    ></audio> -->
+
+    <audio
+      id="player"
+      src="https://www.mboxdrive.com/Mix%20trkl%20(online-audio-converter.com).mp3"
       preload="auto"
       style="display: none;"
     ></audio>
@@ -51,7 +58,7 @@
 
 <script>
 import format from 'date-fns/format';
-import { parseISO } from 'date-fns';
+import { parseISO, differenceInSeconds, isBefore } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { mdiPlay, mdiStop, mdiVolumeHigh } from '@mdi/js';
 
@@ -59,6 +66,7 @@ export default {
   data: () => {
     return {
       audio: null,
+      playerState: 'hidden',
       icons: {
         play: mdiPlay,
         stop: mdiStop,
@@ -79,6 +87,17 @@ export default {
   },
   mounted() {
     this.audio = document.getElementById('player');
+    this.streamStart = new Date(2020, 11, 31, 1, 30);
+    // this.streamStart = new Date(2020, 11, 31, 23, 30);
+
+    setInterval(() => {
+      if (isBefore(this.streamStart, new Date())) {
+        this.playerState = 'hidden';
+      } else {
+        this.playerState = 'stream';
+      }
+      console.log(this.playerState);
+    }, 1000);
   },
   methods: {
     play() {
@@ -93,6 +112,11 @@ export default {
         this.audio.load();
         this.audio.play().then(
           () => {
+            this.audio.currentTime = differenceInSeconds(
+              new Date(),
+              this.streamStart
+            );
+
             this.state = 'playing';
           },
           () => {
