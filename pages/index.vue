@@ -31,7 +31,7 @@
       id="player"
       src="https://djset.wmarques.com/stream"
       preload="auto"
-      style="display: none;"
+      style="display: none"
     ></audio>
   </v-row>
 </template>
@@ -66,20 +66,20 @@ export default {
         play: mdiPlay,
         stop: mdiStop,
         volume: mdiVolumeHigh,
-        download: mdiDownload
+        download: mdiDownload,
       },
       volume: 100,
       nextStreamDate: format(parseISO('2020-09-02T19:30:00.000Z'), 'PPp', {
-        locale: fr
+        locale: fr,
       }),
-      state: 'stopped'
+      state: 'stopped',
     };
   },
 
   watch: {
     volume() {
       this.audio.volume = this.volume / 100;
-    }
+    },
   },
   mounted() {
     this.audio = document.getElementById('player');
@@ -106,7 +106,7 @@ export default {
         );
         this.state = 'loading';
       }
-    }
-  }
+    },
+  },
 };
 </script>
